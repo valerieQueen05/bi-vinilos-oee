@@ -1,0 +1,98 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "6709c72e77596804bddc",
+  "position": {
+    "x": 0,
+    "y": 120.6963249516441,
+    "z": 1,
+    "height": 317.52417794970984,
+    "width": 679.61315280464214,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Horas No Programadas"
+                }
+              },
+              "queryRef": "_Medidas.Horas No Programadas",
+              "nativeQueryRef": "Horas No Programadas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Horas No Programadas Controlables"
+                }
+              },
+              "queryRef": "_Medidas.Horas No Programadas Controlables",
+              "nativeQueryRef": "Horas No Programadas Controlables"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Utilización"
+                }
+              },
+              "queryRef": "_Medidas.Utilización",
+              "nativeQueryRef": "Utilización"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "TEEP"
+                }
+              },
+              "queryRef": "_Medidas.TEEP",
+              "nativeQueryRef": "TEEP"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Medidas"
+                  }
+                },
+                "Property": "Horas No Programadas"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

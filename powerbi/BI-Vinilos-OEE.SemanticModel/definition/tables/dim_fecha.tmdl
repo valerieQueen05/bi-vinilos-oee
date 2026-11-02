@@ -1,0 +1,147 @@
+table dim_fecha
+	lineageTag: 51f25caf-518d-4ab7-837d-5b47513a1d34
+	dataCategory: Time
+
+	column sk_fecha
+		dataType: int64
+		isHidden
+		lineageTag: 8fb3bf07-54b0-4231-a80b-87049f3281ef
+		summarizeBy: none
+		sourceColumn: sk_fecha
+
+	column fecha
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: ec95bc8d-f488-4c69-853b-5bebaebf3dbe
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column anio
+		dataType: int64
+		lineageTag: 9ac5cc8c-142b-4e3b-8a00-b869e78d8ea4
+		summarizeBy: none
+		sourceColumn: anio
+
+	column semestre
+		dataType: int64
+		lineageTag: 6d212837-0187-4549-aa88-82ab1961ac2e
+		summarizeBy: none
+		sourceColumn: semestre
+
+	column trimestre
+		dataType: int64
+		lineageTag: d45f157d-4b00-48ab-abe1-4daf9caf4ebd
+		summarizeBy: none
+		sourceColumn: trimestre
+
+	column mes_num
+		dataType: int64
+		lineageTag: e6cf9849-87e5-427a-8ba7-50f8513f178d
+		summarizeBy: none
+		sourceColumn: mes_num
+
+	column mes_nombre
+		dataType: string
+		lineageTag: 8b8cbc18-bce2-4917-ba1d-1f512c0a8e71
+		summarizeBy: none
+		sourceColumn: mes_nombre
+		sortByColumn: mes_num
+
+	column mes_abrev
+		dataType: string
+		lineageTag: 2eda132c-642c-4f6c-a5d8-b0fb7f7830cd
+		summarizeBy: none
+		sourceColumn: mes_abrev
+
+	column anio_mes
+		dataType: string
+		lineageTag: e2bc3803-6c5a-489f-bb35-0f5f50729aa3
+		summarizeBy: none
+		sourceColumn: anio_mes
+
+	column dia_mes
+		dataType: int64
+		lineageTag: 61ad4bdf-eaa3-4b51-aadb-f477b6513339
+		summarizeBy: none
+		sourceColumn: dia_mes
+
+	column dia_semana_num
+		dataType: int64
+		lineageTag: 6986f01c-97da-41be-82ae-24f30a8a2388
+		summarizeBy: none
+		sourceColumn: dia_semana_num
+
+	column dia_semana_nombre
+		dataType: string
+		lineageTag: 3baf1254-cb3d-489d-a33a-97e944e70620
+		summarizeBy: none
+		sourceColumn: dia_semana_nombre
+		sortByColumn: dia_semana_num
+
+	column semana_iso
+		dataType: int64
+		lineageTag: ab82f882-2052-45a3-93e0-6db0064a02f7
+		summarizeBy: none
+		sourceColumn: semana_iso
+
+	column anio_iso
+		dataType: int64
+		lineageTag: 06cb9e6c-a546-43f3-8fdd-22e5b8bcea9f
+		summarizeBy: none
+		sourceColumn: anio_iso
+
+	column es_fin_de_semana
+		dataType: boolean
+		lineageTag: ab8a6eac-11af-4ba4-ab3c-150057f81ead
+		summarizeBy: none
+		sourceColumn: es_fin_de_semana
+
+	column es_festivo
+		dataType: boolean
+		lineageTag: a6988ec1-9a34-4b8e-b8dc-47477b48a451
+		summarizeBy: none
+		sourceColumn: es_festivo
+
+	column nombre_festivo
+		dataType: string
+		lineageTag: 9722b25e-a0c5-41eb-9d6b-004e264b379e
+		summarizeBy: none
+		sourceColumn: nombre_festivo
+
+	column es_dia_habil
+		dataType: boolean
+		lineageTag: e08182ed-472d-440a-841b-e7b1348fa7cc
+		summarizeBy: none
+		sourceColumn: es_dia_habil
+
+	hierarchy Calendario
+		lineageTag: 0226c8e6-ceac-4a87-9db1-e9bc3c086786
+
+		level Año
+			lineageTag: 7a451ce0-1224-4987-afdf-9b22f88a8f4d
+			column: anio
+
+		level Trimestre
+			lineageTag: 43a51969-78ee-42bf-bab1-a2118f8b36fb
+			column: trimestre
+
+		level Mes
+			lineageTag: 226c5436-7ce6-4955-aa96-ffa3ea1f7fd9
+			column: mes_nombre
+
+		level Día
+			lineageTag: ec796038-4bad-463e-8d6b-0e5c23731b0c
+			column: fecha
+
+	partition dim_fecha = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="dim_fecha"]}[Data]
+				in
+				    Tabla
+

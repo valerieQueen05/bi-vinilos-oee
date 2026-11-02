@@ -1,0 +1,75 @@
+relationship rel_fact_produccion_turno_sk_fecha
+	fromColumn: fact_produccion_turno.sk_fecha
+	toColumn: dim_fecha.sk_fecha
+
+relationship rel_fact_produccion_turno_sk_maquina
+	fromColumn: fact_produccion_turno.sk_maquina
+	toColumn: dim_maquina.sk_maquina
+
+relationship rel_fact_produccion_turno_sk_turno
+	fromColumn: fact_produccion_turno.sk_turno
+	toColumn: dim_turno.sk_turno
+
+relationship rel_fact_produccion_turno_sk_operario
+	fromColumn: fact_produccion_turno.sk_operario
+	toColumn: dim_persona.sk_persona
+
+relationship rel_fact_produccion_turno_sk_referencia
+	fromColumn: fact_produccion_turno.sk_referencia
+	toColumn: dim_referencia.sk_referencia
+
+relationship rel_fact_paro_sk_fecha
+	fromColumn: fact_paro.sk_fecha
+	toColumn: dim_fecha.sk_fecha
+
+relationship rel_fact_paro_sk_maquina
+	fromColumn: fact_paro.sk_maquina
+	toColumn: dim_maquina.sk_maquina
+
+relationship rel_fact_paro_sk_turno
+	fromColumn: fact_paro.sk_turno
+	toColumn: dim_turno.sk_turno
+
+relationship rel_fact_paro_sk_operario
+	fromColumn: fact_paro.sk_operario
+	toColumn: dim_persona.sk_persona
+
+relationship rel_fact_paro_sk_referencia
+	fromColumn: fact_paro.sk_referencia
+	toColumn: dim_referencia.sk_referencia
+
+relationship rel_fact_paro_sk_causa
+	fromColumn: fact_paro.sk_causa
+	toColumn: dim_causa_paro.sk_causa
+
+relationship rel_fact_tiempo_no_programado_sk_fecha
+	fromColumn: fact_tiempo_no_programado.sk_fecha
+	toColumn: dim_fecha.sk_fecha
+
+relationship rel_fact_tiempo_no_programado_sk_maquina
+	fromColumn: fact_tiempo_no_programado.sk_maquina
+	toColumn: dim_maquina.sk_maquina
+
+relationship rel_fact_tiempo_no_programado_sk_turno
+	fromColumn: fact_tiempo_no_programado.sk_turno
+	toColumn: dim_turno.sk_turno
+
+relationship rel_fact_tiempo_no_programado_sk_motivo
+	fromColumn: fact_tiempo_no_programado.sk_motivo
+	toColumn: dim_motivo_no_programado.sk_motivo
+
+relationship rel_fact_paro_sk_persona_involucrada
+	isActive: false
+	fromColumn: fact_paro.sk_persona_involucrada
+	toColumn: dim_persona.sk_persona
+
+relationship f7c3e15f-1458-4a38-b2e4-47c9982d3bd0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_maquina.valido_desde
+	toColumn: LocalDateTable_b0a4d076-5333-4bab-b80f-f1d4fed7f8b5.Date
+
+relationship ef69eb6a-9d28-4e98-b0d4-a19b0f34dded
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_maquina.valido_hasta
+	toColumn: LocalDateTable_5039bbee-ead0-4747-af87-357b5ac789fe.Date
+

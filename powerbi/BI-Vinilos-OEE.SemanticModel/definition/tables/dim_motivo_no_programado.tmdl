@@ -1,0 +1,49 @@
+table dim_motivo_no_programado
+	lineageTag: f07c1f61-6670-4412-983f-2922adb32ce9
+
+	column sk_motivo
+		dataType: int64
+		isHidden
+		lineageTag: dcf2865f-2118-4c94-9508-3d35d2d3d093
+		summarizeBy: none
+		sourceColumn: sk_motivo
+
+	column cod_motivo
+		dataType: string
+		lineageTag: d684d37f-4f61-4e91-bbf8-b908685a359e
+		summarizeBy: none
+		sourceColumn: cod_motivo
+
+	column motivo_estandar
+		dataType: string
+		lineageTag: 4bcdc92d-8814-456a-9d46-fa352d75ac0c
+		summarizeBy: none
+		sourceColumn: motivo_estandar
+
+	column responsable
+		dataType: string
+		lineageTag: e8e608d9-16d3-4797-b545-12f762619bfb
+		summarizeBy: none
+		sourceColumn: responsable
+
+	column observacion
+		dataType: string
+		lineageTag: 39e56918-c44d-4ab8-8380-29defbc25bb8
+		summarizeBy: none
+		sourceColumn: observacion
+
+	column es_controlable
+		dataType: boolean
+		lineageTag: 88b2ff16-05ce-45d5-88a9-2ee627283fe1
+		summarizeBy: none
+		sourceColumn: es_controlable
+
+	partition dim_motivo_no_programado = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="dim_motivo_no_programado"]}[Data]
+				in
+				    Tabla
+

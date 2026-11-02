@@ -1,0 +1,10 @@
+expression ServidorPostgres = "172.16.213.1:5432" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 680880bf-e028-4d81-8a3f-a03231561bc9
+
+	annotation PBI_ResultType = Text
+
+expression BaseDatos = "bi_vinilos" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 995adfc0-1417-4a23-9e43-1e8efe71349d
+
+	annotation PBI_ResultType = Text
+

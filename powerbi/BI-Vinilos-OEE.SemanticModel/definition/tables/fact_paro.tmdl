@@ -1,0 +1,106 @@
+table fact_paro
+	lineageTag: 954d01f1-4dc7-4c77-852b-a59d4064bdca
+
+	column id_paro
+		dataType: int64
+		isHidden
+		lineageTag: fc3e07e3-106b-4f2e-be81-620aaf1f8ce2
+		summarizeBy: none
+		sourceColumn: id_paro
+
+	column id_registro
+		dataType: int64
+		isHidden
+		lineageTag: 6ae34b1c-6bdf-47d9-acea-5117918d4319
+		summarizeBy: none
+		sourceColumn: id_registro
+
+	column fila_origen
+		dataType: int64
+		isHidden
+		lineageTag: 7723cedb-efc1-478b-8d62-22a0851cf3ee
+		summarizeBy: none
+		sourceColumn: fila_origen
+
+	column sk_fecha
+		dataType: int64
+		isHidden
+		lineageTag: 479b592e-7675-4390-bfc5-58e958f7cfd0
+		summarizeBy: none
+		sourceColumn: sk_fecha
+
+	column sk_maquina
+		dataType: int64
+		isHidden
+		lineageTag: 01fb51ce-7824-45e4-b935-cf3171b2d7c2
+		summarizeBy: none
+		sourceColumn: sk_maquina
+
+	column sk_turno
+		dataType: int64
+		isHidden
+		lineageTag: c4f68be1-5131-4e64-bfd4-3a7edc2008d7
+		summarizeBy: none
+		sourceColumn: sk_turno
+
+	column sk_operario
+		dataType: int64
+		isHidden
+		lineageTag: d1d9c278-fac2-41c5-a6e0-beb7aa4e8350
+		summarizeBy: none
+		sourceColumn: sk_operario
+
+	column sk_referencia
+		dataType: int64
+		isHidden
+		lineageTag: 90502035-95f2-4b4b-b71b-5fd950d57b3c
+		summarizeBy: none
+		sourceColumn: sk_referencia
+
+	column sk_causa
+		dataType: int64
+		isHidden
+		lineageTag: e3b9092a-1c23-4392-9f8d-b1580aeb4234
+		summarizeBy: none
+		sourceColumn: sk_causa
+
+	column sk_persona_involucrada
+		dataType: int64
+		isHidden
+		lineageTag: 874ecb4f-d6e0-472d-aba6-b53e58e3d34e
+		summarizeBy: none
+		sourceColumn: sk_persona_involucrada
+
+	column area_involucrada
+		dataType: string
+		lineageTag: 238b14fa-2a16-4c3c-a2d3-716294820cd7
+		summarizeBy: none
+		sourceColumn: area_involucrada
+
+	column minutos_paro
+		dataType: double
+		lineageTag: 3653d1ba-3e47-4611-926f-f63db31c1a5f
+		summarizeBy: sum
+		sourceColumn: minutos_paro
+
+	column horas_paro
+		dataType: double
+		lineageTag: 19f9b6a7-7dbc-4c09-ae14-33e7c58d7331
+		summarizeBy: sum
+		sourceColumn: horas_paro
+
+	column es_fila_continuacion
+		dataType: boolean
+		lineageTag: bd3c207d-b0c9-4b17-95bd-c3f011e41450
+		summarizeBy: none
+		sourceColumn: es_fila_continuacion
+
+	partition fact_paro = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="fact_paro"]}[Data]
+				in
+				    Tabla
+

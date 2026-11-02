@@ -1,0 +1,158 @@
+table fact_produccion_turno
+	lineageTag: 18106d75-5a33-4af2-b2fd-6a68f1e7fca2
+
+	column id_registro
+		dataType: int64
+		isHidden
+		lineageTag: fde5b531-75bf-4d3e-8f27-77e32d67f7c3
+		summarizeBy: none
+		sourceColumn: id_registro
+
+	column sk_fecha
+		dataType: int64
+		isHidden
+		lineageTag: 8a30bb29-5afa-433e-bac6-6082f8af4793
+		summarizeBy: none
+		sourceColumn: sk_fecha
+
+	column sk_maquina
+		dataType: int64
+		isHidden
+		lineageTag: fa951987-0cca-4076-bbc9-684c1f32fb99
+		summarizeBy: none
+		sourceColumn: sk_maquina
+
+	column sk_turno
+		dataType: int64
+		isHidden
+		lineageTag: 0288e268-7816-4001-a2d4-d26469a9d642
+		summarizeBy: none
+		sourceColumn: sk_turno
+
+	column sk_operario
+		dataType: int64
+		isHidden
+		lineageTag: 394498ba-dc22-4e69-8004-9f63f400016a
+		summarizeBy: none
+		sourceColumn: sk_operario
+
+	column sk_referencia
+		dataType: int64
+		isHidden
+		lineageTag: 2b3cdfdf-3030-4981-bfca-fce093575af6
+		summarizeBy: none
+		sourceColumn: sk_referencia
+
+	column horas_trabajadas
+		dataType: double
+		lineageTag: 150ff8c2-2fa8-4b13-9520-bf9d6c8e2eb5
+		summarizeBy: sum
+		sourceColumn: horas_trabajadas
+
+	column horas_paro_planificado
+		dataType: double
+		lineageTag: 857708a1-23ce-442a-a036-f405cbcebccc
+		summarizeBy: sum
+		sourceColumn: horas_paro_planificado
+
+	column horas_paro_disponibilidad
+		dataType: double
+		lineageTag: 3bdb5912-09a1-4be4-a6da-dc197ab51120
+		summarizeBy: sum
+		sourceColumn: horas_paro_disponibilidad
+
+	column horas_paro_calidad
+		dataType: double
+		lineageTag: f4ff54d8-b885-46b6-a049-addeede67326
+		summarizeBy: sum
+		sourceColumn: horas_paro_calidad
+
+	column horas_paro_total
+		dataType: double
+		lineageTag: fd522ec0-c2c6-476f-a77c-7ef7b3cd1362
+		summarizeBy: sum
+		sourceColumn: horas_paro_total
+
+	column tiempo_planificado_h
+		dataType: double
+		lineageTag: 91959b40-1d2c-464d-ad43-ca26f22a5f7c
+		summarizeBy: sum
+		sourceColumn: tiempo_planificado_h
+
+	column tiempo_operativo_h
+		dataType: double
+		lineageTag: 66de94a8-d5ac-466c-8067-9067515e6925
+		summarizeBy: sum
+		sourceColumn: tiempo_operativo_h
+
+	column tiempo_ideal_h
+		dataType: double
+		lineageTag: 2e63eebe-8921-4fc3-a27a-6f9731941bec
+		summarizeBy: sum
+		sourceColumn: tiempo_ideal_h
+
+	column pacas_producidas
+		dataType: double
+		lineageTag: 9e9b5e52-98d0-49ea-9f1d-630728003193
+		summarizeBy: sum
+		sourceColumn: pacas_producidas
+
+	column pacas_meta
+		dataType: double
+		lineageTag: fd8fb51d-96e5-43c5-b344-90e5c1087dcd
+		summarizeBy: sum
+		sourceColumn: pacas_meta
+
+	column n_eventos_paro
+		dataType: int64
+		lineageTag: 6f447741-14bd-4a76-b481-9816b2d930e7
+		summarizeBy: sum
+		sourceColumn: n_eventos_paro
+
+	column pacas_hora_ideal
+		dataType: double
+		lineageTag: f6092ce9-7290-4868-819e-46437aef6d3d
+		summarizeBy: sum
+		sourceColumn: pacas_hora_ideal
+
+	column origen_estandar
+		dataType: string
+		lineageTag: bb4b0781-e909-4a27-ac3e-6a4d70f54ad3
+		summarizeBy: none
+		sourceColumn: origen_estandar
+
+	column es_registro_historico
+		dataType: boolean
+		lineageTag: d2ee3396-3fba-4ba5-a572-6e32e29822e7
+		summarizeBy: none
+		sourceColumn: es_registro_historico
+
+	column dq_pacas_atipica
+		dataType: boolean
+		lineageTag: 57e355dc-facc-4b43-8e94-39ed6fa18eb0
+		summarizeBy: none
+		sourceColumn: dq_pacas_atipica
+
+	column dq_paro_mayor_turno
+		dataType: boolean
+		lineageTag: bb01cc98-a598-440a-a30a-62e3e32fee46
+		summarizeBy: none
+		sourceColumn: dq_paro_mayor_turno
+
+	column es_valido_oee
+		dataType: boolean
+		lineageTag: 577b5237-15d7-4fd1-8fee-acff0406a9c9
+		summarizeBy: none
+		sourceColumn: es_valido_oee
+
+	partition fact_produccion_turno = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="fact_produccion_turno"]}[Data]
+				in
+				    Tabla
+
+	annotation PBI_ResultType = Table
+

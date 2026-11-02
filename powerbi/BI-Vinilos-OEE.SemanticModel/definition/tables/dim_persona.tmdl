@@ -1,0 +1,37 @@
+table dim_persona
+	lineageTag: 4c25d92a-3a63-418b-8d1a-74d0bc9db357
+
+	column sk_persona
+		dataType: int64
+		isHidden
+		lineageTag: e4617c77-fc89-45f6-b1e8-17c6da592b42
+		summarizeBy: none
+		sourceColumn: sk_persona
+
+	column cod_persona
+		dataType: string
+		lineageTag: ef533aed-8676-492d-9b7a-becd9773128f
+		summarizeBy: none
+		sourceColumn: cod_persona
+
+	column rol
+		dataType: string
+		lineageTag: 4b9f227c-4c18-41ec-9557-e806f99ff0bc
+		summarizeBy: none
+		sourceColumn: rol
+
+	column alias_publico
+		dataType: string
+		lineageTag: 53b13e48-649e-4733-b027-21c04ded58a5
+		summarizeBy: none
+		sourceColumn: alias_publico
+
+	partition dim_persona = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="dim_persona"]}[Data]
+				in
+				    Tabla
+

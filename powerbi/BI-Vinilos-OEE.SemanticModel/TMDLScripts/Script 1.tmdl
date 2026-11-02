@@ -1,0 +1,531 @@
+createOrReplace
+
+	table fact_produccion_turno
+
+		column id_registro
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: id_registro
+
+		column sk_fecha
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_fecha
+
+		column sk_maquina
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_maquina
+
+		column sk_turno
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_turno
+
+		column sk_operario
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_operario
+
+		column sk_referencia
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_referencia
+
+		column horas_trabajadas
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: horas_trabajadas
+
+		column horas_paro_planificado
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: horas_paro_planificado
+
+		column horas_paro_disponibilidad
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: horas_paro_disponibilidad
+
+		column horas_paro_calidad
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: horas_paro_calidad
+
+		column horas_paro_total
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: horas_paro_total
+
+		column tiempo_planificado_h
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: tiempo_planificado_h
+
+		column tiempo_operativo_h
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: tiempo_operativo_h
+
+		column tiempo_ideal_h
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: tiempo_ideal_h
+
+		column pacas_producidas
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: pacas_producidas
+
+		column pacas_meta
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: pacas_meta
+
+		column n_eventos_paro
+			dataType: int64
+			summarizeBy: sum
+			sourceColumn: n_eventos_paro
+
+		column pacas_hora_ideal
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: pacas_hora_ideal
+
+		column origen_estandar
+			dataType: string
+			summarizeBy: none
+			sourceColumn: origen_estandar
+
+		column es_registro_historico
+			dataType: boolean
+			summarizeBy: none
+			sourceColumn: es_registro_historico
+
+		column dq_pacas_atipica
+			dataType: boolean
+			summarizeBy: none
+			sourceColumn: dq_pacas_atipica
+
+		column dq_paro_mayor_turno
+			dataType: boolean
+			summarizeBy: none
+			sourceColumn: dq_paro_mayor_turno
+
+		column es_valido_oee
+			dataType: boolean
+			summarizeBy: none
+			sourceColumn: es_valido_oee
+
+		partition fact_produccion_turno = m
+			mode: import
+			source =
+					let
+					    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+					    Tabla = Origen{[Schema="dw",Item="fact_produccion_turno"]}[Data]
+					in
+					    Tabla
+
+	table fact_paro
+
+		column id_paro
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: id_paro
+
+		column id_registro
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: id_registro
+
+		column fila_origen
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: fila_origen
+
+		column sk_fecha
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_fecha
+
+		column sk_maquina
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_maquina
+
+		column sk_turno
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_turno
+
+		column sk_operario
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_operario
+
+		column sk_referencia
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_referencia
+
+		column sk_causa
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_causa
+
+		column sk_persona_involucrada
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_persona_involucrada
+
+		column area_involucrada
+			dataType: string
+			summarizeBy: none
+			sourceColumn: area_involucrada
+
+		column minutos_paro
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: minutos_paro
+
+		column horas_paro
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: horas_paro
+
+		column es_fila_continuacion
+			dataType: boolean
+			summarizeBy: none
+			sourceColumn: es_fila_continuacion
+
+		partition fact_paro = m
+			mode: import
+			source =
+					let
+					    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+					    Tabla = Origen{[Schema="dw",Item="fact_paro"]}[Data]
+					in
+					    Tabla
+
+	table fact_tiempo_no_programado
+
+		column id_registro
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: id_registro
+
+		column sk_fecha
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_fecha
+
+		column sk_maquina
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_maquina
+
+		column sk_turno
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_turno
+
+		column sk_motivo
+			dataType: int64
+			isHidden
+			summarizeBy: none
+			sourceColumn: sk_motivo
+
+		column horas_no_programadas
+			dataType: double
+			summarizeBy: sum
+			sourceColumn: horas_no_programadas
+
+		column dq_horas_recortadas
+			dataType: boolean
+			summarizeBy: none
+			sourceColumn: dq_horas_recortadas
+
+		partition fact_tiempo_no_programado = m
+			mode: import
+			source =
+					let
+					    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+					    Tabla = Origen{[Schema="dw",Item="fact_tiempo_no_programado"]}[Data]
+					in
+					    Tabla
+
+	table _Medidas
+
+		measure 'Horas Trabajadas' = SUM ( fact_produccion_turno[horas_trabajadas] )
+			formatString: #,0.0
+			displayFolder: 1 Base
+
+		measure 'Horas Paro' = SUM ( fact_produccion_turno[horas_paro_total] )
+			formatString: #,0.0
+			displayFolder: 1 Base
+
+		measure 'Pacas' = SUM ( fact_produccion_turno[pacas_producidas] )
+			formatString: #,0
+			displayFolder: 1 Base
+
+		measure 'Registros de Turno' = COUNTROWS ( fact_produccion_turno )
+			formatString: #,0
+			displayFolder: 1 Base
+
+		measure '% Productividad' = DIVIDE ( [Horas Trabajadas] - [Horas Paro], [Horas Trabajadas] )
+			formatString: 0.0%
+			displayFolder: 2 Indicadores P-MTO-22
+
+		measure '% Paro' = 1 - [% Productividad]
+			formatString: 0.0%
+			displayFolder: 2 Indicadores P-MTO-22
+
+		measure '% Código s/ Horas Trabajadas' = DIVIDE ( [Horas Paro (eventos)], CALCULATE ( [Horas Trabajadas], REMOVEFILTERS ( dim_causa_paro ) ) )
+			formatString: 0.00%
+			displayFolder: 2 Indicadores P-MTO-22
+
+		measure 'T Planificado' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_planificado_h] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+			formatString: #,0.0
+			displayFolder: 3 OEE
+
+		measure 'T Operativo' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+			formatString: #,0.0
+			displayFolder: 3 OEE
+
+		measure 'T Neto' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ) - SUM ( fact_produccion_turno[horas_paro_calidad] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+			formatString: #,0.0
+			displayFolder: 3 OEE
+
+		measure 'T Ideal' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_ideal_h] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+			formatString: #,0.0
+			displayFolder: 3 OEE
+
+		measure 'Disponibilidad' = DIVIDE ( [T Operativo], [T Planificado] )
+			formatString: 0.0%
+			displayFolder: 3 OEE
+
+		measure 'Rendimiento' = DIVIDE ( [T Ideal], [T Neto] )
+			formatString: 0.0%
+			displayFolder: 3 OEE
+
+		measure 'Calidad' = DIVIDE ( [T Neto], [T Operativo] )
+			formatString: 0.0%
+			displayFolder: 3 OEE
+
+		measure 'OEE' = DIVIDE ( [T Ideal], [T Planificado] )
+			formatString: 0.0%
+			displayFolder: 3 OEE
+
+		measure 'OEE Meta' = 0.75
+			formatString: 0.0%
+			displayFolder: 3 OEE
+
+		measure 'OEE Semáforo' = SWITCH ( TRUE (), ISBLANK ( [OEE] ), BLANK (), [OEE] >= 0.75, "#2E7D32", [OEE] >= 0.60, "#F9A825", "#C62828" )
+			displayFolder: 3 OEE
+
+		measure 'Pacas Meta' = CALCULATE ( SUM ( fact_produccion_turno[pacas_meta] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+			formatString: #,0
+			displayFolder: 3 OEE
+
+		measure 'Cumplimiento Meta' = DIVIDE ( CALCULATE ( [Pacas], fact_produccion_turno[es_valido_oee] = TRUE () ), [Pacas Meta] )
+			formatString: 0.0%
+			displayFolder: 3 OEE
+
+		measure 'Horas Paro (eventos)' = SUM ( fact_paro[horas_paro] )
+			formatString: #,0.0
+			displayFolder: 4 Paros
+
+		measure 'Eventos de Paro' = COUNTROWS ( fact_paro )
+			formatString: #,0
+			displayFolder: 4 Paros
+
+		measure 'Minutos por Evento' = DIVIDE ( SUM ( fact_paro[minutos_paro] ), [Eventos de Paro] )
+			formatString: #,0.0
+			displayFolder: 4 Paros
+
+		measure '% del Tiempo de Paro' = DIVIDE ( [Horas Paro (eventos)], CALCULATE ( [Horas Paro (eventos)], ALLSELECTED ( dim_causa_paro ) ) )
+			formatString: 0.0%
+			displayFolder: 4 Paros
+
+		measure 'Pareto % Acumulado' = ```
+				VAR _actual = [Horas Paro (eventos)]
+				VAR _tabla = ADDCOLUMNS ( ALLSELECTED ( dim_causa_paro[codigo_desc] ), "@h", [Horas Paro (eventos)] )
+				VAR _acum = SUMX ( FILTER ( _tabla, [@h] >= _actual ), [@h] )
+				RETURN IF ( ISBLANK ( _actual ), BLANK (), DIVIDE ( _acum, SUMX ( _tabla, [@h] ) ) )
+				```
+			formatString: 0%
+			displayFolder: 4 Paros
+
+		measure 'Pareto Clase ABC' = ```
+				VAR p = [Pareto % Acumulado] - [% del Tiempo de Paro]
+				RETURN IF ( ISBLANK ( [Horas Paro (eventos)] ), BLANK (), IF ( p < 0.8, "A", IF ( p < 0.95, "B", "C" ) ) )
+				```
+			displayFolder: 4 Paros
+
+		measure 'Horas Paro por Persona Involucrada' = CALCULATE ( [Horas Paro (eventos)], USERELATIONSHIP ( fact_paro[sk_persona_involucrada], dim_persona[sk_persona] ) )
+			formatString: #,0.0
+			displayFolder: 4 Paros
+
+		measure 'Fallas' = CALCULATE ( [Eventos de Paro], dim_causa_paro[cod_codigo] IN { "01", "02" } )
+			formatString: #,0
+			displayFolder: 4 Paros
+
+		measure 'MTBF (h)' = DIVIDE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ), [Fallas] )
+			formatString: #,0.0
+			displayFolder: 4 Paros
+
+		measure 'MTTR (min)' = DIVIDE ( CALCULATE ( SUM ( fact_paro[minutos_paro] ), dim_causa_paro[cod_codigo] IN { "01", "02" } ), [Fallas] )
+			formatString: #,0.0
+			displayFolder: 4 Paros
+
+		measure 'Horas No Programadas' = SUM ( fact_tiempo_no_programado[horas_no_programadas] )
+			formatString: #,0
+			displayFolder: 5 Capacidad
+
+		measure 'Utilización' = DIVIDE ( [Horas Trabajadas], [Horas Trabajadas] + [Horas No Programadas] )
+			formatString: 0.0%
+			displayFolder: 5 Capacidad
+
+		measure 'TEEP' = [OEE] * [Utilización]
+			formatString: 0.0%
+			displayFolder: 5 Capacidad
+
+		measure 'Horas No Programadas Controlables' = CALCULATE ( [Horas No Programadas], dim_motivo_no_programado[es_controlable] = TRUE () )
+			formatString: #,0
+			displayFolder: 5 Capacidad
+
+		measure 'OEE Año Anterior' = CALCULATE ( [OEE], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+			formatString: 0.0%
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure 'Var OEE vs Año Anterior (pp)' = IF ( ISBLANK ( [OEE Año Anterior] ) || ISBLANK ( [OEE] ), BLANK (), ( [OEE] - [OEE Año Anterior] ) * 100 )
+			formatString: +0.0;-0.0;0.0
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure 'OEE Mes Anterior' = CALCULATE ( [OEE], DATEADD ( dim_fecha[fecha], -1, MONTH ) )
+			formatString: 0.0%
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure 'OEE Móvil 3 Meses' = CALCULATE ( [OEE], DATESINPERIOD ( dim_fecha[fecha], MAX ( dim_fecha[fecha] ), -3, MONTH ) )
+			formatString: 0.0%
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure 'Pacas YTD' = TOTALYTD ( [Pacas], dim_fecha[fecha] )
+			formatString: #,0
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure 'Pacas YTD Año Anterior' = CALCULATE ( [Pacas YTD], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+			formatString: #,0
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure 'Crecimiento Pacas YTD' = DIVIDE ( [Pacas YTD] - [Pacas YTD Año Anterior], [Pacas YTD Año Anterior] )
+			formatString: +0.0%;-0.0%;0.0%
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure 'Horas Paro Año Anterior' = CALCULATE ( [Horas Paro (eventos)], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+			formatString: #,0.0
+			displayFolder: 6 Inteligencia de tiempo
+
+		measure '% Turnos con Estándar Imputado' = DIVIDE ( CALCULATE ( [Registros de Turno], fact_produccion_turno[origen_estandar] <> "tabla_maquina" ), [Registros de Turno] )
+			formatString: 0.0%
+			displayFolder: 7 Calidad de datos
+
+		measure 'Turnos Excluidos de OEE' = CALCULATE ( [Registros de Turno], fact_produccion_turno[es_valido_oee] = FALSE () )
+			formatString: #,0
+			displayFolder: 7 Calidad de datos
+
+		column Columna
+			dataType: int64
+			isHidden
+			isNameInferred
+			summarizeBy: none
+			sourceColumn: [Columna]
+
+		partition _Medidas = calculated
+			mode: import
+			source = ROW ( "Columna", 1 )
+
+	relationship rel_fact_produccion_turno_sk_fecha
+		fromColumn: fact_produccion_turno.sk_fecha
+		toColumn: dim_fecha.sk_fecha
+
+	relationship rel_fact_produccion_turno_sk_maquina
+		fromColumn: fact_produccion_turno.sk_maquina
+		toColumn: dim_maquina.sk_maquina
+
+	relationship rel_fact_produccion_turno_sk_turno
+		fromColumn: fact_produccion_turno.sk_turno
+		toColumn: dim_turno.sk_turno
+
+	relationship rel_fact_produccion_turno_sk_operario
+		fromColumn: fact_produccion_turno.sk_operario
+		toColumn: dim_persona.sk_persona
+
+	relationship rel_fact_produccion_turno_sk_referencia
+		fromColumn: fact_produccion_turno.sk_referencia
+		toColumn: dim_referencia.sk_referencia
+
+	relationship rel_fact_paro_sk_fecha
+		fromColumn: fact_paro.sk_fecha
+		toColumn: dim_fecha.sk_fecha
+
+	relationship rel_fact_paro_sk_maquina
+		fromColumn: fact_paro.sk_maquina
+		toColumn: dim_maquina.sk_maquina
+
+	relationship rel_fact_paro_sk_turno
+		fromColumn: fact_paro.sk_turno
+		toColumn: dim_turno.sk_turno
+
+	relationship rel_fact_paro_sk_operario
+		fromColumn: fact_paro.sk_operario
+		toColumn: dim_persona.sk_persona
+
+	relationship rel_fact_paro_sk_referencia
+		fromColumn: fact_paro.sk_referencia
+		toColumn: dim_referencia.sk_referencia
+
+	relationship rel_fact_paro_sk_causa
+		fromColumn: fact_paro.sk_causa
+		toColumn: dim_causa_paro.sk_causa
+
+	relationship rel_fact_tiempo_no_programado_sk_fecha
+		fromColumn: fact_tiempo_no_programado.sk_fecha
+		toColumn: dim_fecha.sk_fecha
+
+	relationship rel_fact_tiempo_no_programado_sk_maquina
+		fromColumn: fact_tiempo_no_programado.sk_maquina
+		toColumn: dim_maquina.sk_maquina
+
+	relationship rel_fact_tiempo_no_programado_sk_turno
+		fromColumn: fact_tiempo_no_programado.sk_turno
+		toColumn: dim_turno.sk_turno
+
+	relationship rel_fact_tiempo_no_programado_sk_motivo
+		fromColumn: fact_tiempo_no_programado.sk_motivo
+		toColumn: dim_motivo_no_programado.sk_motivo
+
+	relationship rel_fact_paro_sk_persona_involucrada
+		isActive: false
+		fromColumn: fact_paro.sk_persona_involucrada
+		toColumn: dim_persona.sk_persona

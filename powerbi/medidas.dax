@@ -1,0 +1,94 @@
+// =============================================================================
+// medidas.dax · Medidas del modelo semántico (crear en una tabla "_Medidas")
+// Regla de oro: los porcentajes SIEMPRE como cociente de sumas (DIVIDE de
+// totales), nunca promedio de porcentajes. Así el OEE de un año = el de sus meses
+// ponderado por horas, igual que en las vistas SQL (sql/ddl/05_vistas.sql).
+// Carpeta de visualización entre corchetes.
+// =============================================================================
+
+// ---------- [1 Base] ---------------------------------------------------------
+Horas Trabajadas = SUM ( fact_produccion_turno[horas_trabajadas] )                  // #,0.0
+Horas Paro = SUM ( fact_produccion_turno[horas_paro_total] )                         // #,0.0
+Pacas = SUM ( fact_produccion_turno[pacas_producidas] )                              // #,0
+Registros de Turno = COUNTROWS ( fact_produccion_turno )                             // #,0
+
+// ---------- [2 Indicadores P-MTO-22 (los que hoy reporta el Excel)] ----------
+% Productividad = DIVIDE ( [Horas Trabajadas] - [Horas Paro], [Horas Trabajadas] )   // 0.0%
+% Paro = 1 - [% Productividad]                                                       // 0.0%
+
+// % de cada código sobre las horas trabajadas ("% Código N" de las tablas dinámicas).
+// dim_causa_paro no filtra fact_produccion_turno, por eso el denominador ignora la causa.
+% Código s/ Horas Trabajadas =
+DIVIDE ( [Horas Paro (eventos)], CALCULATE ( [Horas Trabajadas], REMOVEFILTERS ( dim_causa_paro ) ) )
+
+// ---------- [3 OEE] ------------------------------------------------------------
+// Solo registros válidos para OEE (horas > 0, pacas válidas, estándar disponible)
+T Planificado = CALCULATE ( SUM ( fact_produccion_turno[tiempo_planificado_h] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+T Operativo  = CALCULATE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ),  fact_produccion_turno[es_valido_oee] = TRUE () )
+T Neto       = CALCULATE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ) - SUM ( fact_produccion_turno[horas_paro_calidad] ),
+                           fact_produccion_turno[es_valido_oee] = TRUE () )
+T Ideal      = CALCULATE ( SUM ( fact_produccion_turno[tiempo_ideal_h] ),      fact_produccion_turno[es_valido_oee] = TRUE () )
+
+Disponibilidad = DIVIDE ( [T Operativo], [T Planificado] )                           // 0.0%
+Rendimiento    = DIVIDE ( [T Ideal], [T Neto] )                                      // 0.0%
+Calidad        = DIVIDE ( [T Neto], [T Operativo] )                                  // 0.0%
+OEE            = DIVIDE ( [T Ideal], [T Planificado] )                               // 0.0%   (= A × P × Q)
+
+OEE Meta = 0.75                                                                      // 0.0%   meta propuesta (clase mundial = 0.85)
+OEE Semáforo =
+SWITCH ( TRUE (), [OEE] >= 0.75, "#2E7D32", [OEE] >= 0.60, "#F9A825", "#C62828" )   // para formato condicional
+
+Pacas Meta = CALCULATE ( SUM ( fact_produccion_turno[pacas_meta] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+Cumplimiento Meta = DIVIDE ( CALCULATE ( [Pacas], fact_produccion_turno[es_valido_oee] = TRUE () ), [Pacas Meta] )  // 0.0%
+Pacas por Hora Operativa = DIVIDE ( CALCULATE ( [Pacas], fact_produccion_turno[es_valido_oee] = TRUE () ), [T Operativo] )
+
+// ---------- [4 Paros] -----------------------------------------------------------
+Horas Paro (eventos) = SUM ( fact_paro[horas_paro] )                                 // #,0.0
+Eventos de Paro = COUNTROWS ( fact_paro )                                            // #,0
+Minutos por Evento = DIVIDE ( SUM ( fact_paro[minutos_paro] ), [Eventos de Paro] )   // #,0.0
+% del Tiempo de Paro =
+DIVIDE ( [Horas Paro (eventos)], CALCULATE ( [Horas Paro (eventos)], ALLSELECTED ( dim_causa_paro ) ) )
+
+// Pareto: % acumulado ordenando las causas de mayor a menor
+Pareto % Acumulado =
+VAR _actual = [Horas Paro (eventos)]
+VAR _tabla =
+    ADDCOLUMNS ( ALLSELECTED ( dim_causa_paro[codigo_desc] ), "@h", [Horas Paro (eventos)] )
+VAR _acum = SUMX ( FILTER ( _tabla, [@h] >= _actual ), [@h] )
+RETURN DIVIDE ( _acum, SUMX ( _tabla, [@h] ) )                                        // 0%
+
+Pareto Clase ABC =
+VAR p = [Pareto % Acumulado] - [% del Tiempo de Paro]
+RETURN IF ( ISBLANK ( [Horas Paro (eventos)] ), BLANK (), IF ( p < 0.8, "A", IF ( p < 0.95, "B", "C" ) ) )
+
+// Paros por la persona involucrada (relación inactiva fact_paro[sk_persona_involucrada])
+Horas Paro por Persona Involucrada =
+CALCULATE ( [Horas Paro (eventos)], USERELATIONSHIP ( fact_paro[sk_persona_involucrada], dim_persona[sk_persona] ) )
+
+// Confiabilidad de mantenimiento (códigos 01 y 02)
+Fallas = CALCULATE ( [Eventos de Paro], dim_causa_paro[cod_codigo] IN { "01", "02" } )
+MTBF (h) = DIVIDE ( CALCULATE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ) ), [Fallas] )   // #,0.0
+MTTR (min) = DIVIDE ( CALCULATE ( SUM ( fact_paro[minutos_paro] ), dim_causa_paro[cod_codigo] IN { "01", "02" } ), [Fallas] )
+
+// ---------- [5 Capacidad] -------------------------------------------------------
+Horas No Programadas = SUM ( fact_tiempo_no_programado[horas_no_programadas] )      // #,0
+Utilización = DIVIDE ( [Horas Trabajadas], [Horas Trabajadas] + [Horas No Programadas] )   // 0.0%
+TEEP = [OEE] * [Utilización]                                                          // 0.0%
+Horas No Programadas Controlables =
+CALCULATE ( [Horas No Programadas], dim_motivo_no_programado[es_controlable] = TRUE () )
+
+// ---------- [6 Inteligencia de tiempo] -----------------------------------------
+// Requiere dim_fecha marcada como tabla de fechas (columna fecha)
+OEE Año Anterior = CALCULATE ( [OEE], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )      // 0.0%
+Var OEE vs Año Anterior (pp) = IF ( ISBLANK ( [OEE Año Anterior] ), BLANK (), ( [OEE] - [OEE Año Anterior] ) * 100 )   // +0.0;-0.0
+OEE Mes Anterior = CALCULATE ( [OEE], DATEADD ( dim_fecha[fecha], -1, MONTH ) )
+OEE Móvil 3 Meses = CALCULATE ( [OEE], DATESINPERIOD ( dim_fecha[fecha], MAX ( dim_fecha[fecha] ), -3, MONTH ) )
+Pacas YTD = TOTALYTD ( [Pacas], dim_fecha[fecha] )                                    // #,0
+Pacas YTD Año Anterior = CALCULATE ( [Pacas YTD], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+Crecimiento Pacas YTD = DIVIDE ( [Pacas YTD] - [Pacas YTD Año Anterior], [Pacas YTD Año Anterior] )   // +0.0%;-0.0%
+Horas Paro Año Anterior = CALCULATE ( [Horas Paro (eventos)], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+
+// ---------- [7 Calidad de datos] -------------------------------------------------
+% Turnos con Estándar Imputado =
+DIVIDE ( CALCULATE ( [Registros de Turno], fact_produccion_turno[origen_estandar] <> "tabla_maquina" ), [Registros de Turno] )
+Turnos Excluidos de OEE = CALCULATE ( [Registros de Turno], fact_produccion_turno[es_valido_oee] = FALSE () )

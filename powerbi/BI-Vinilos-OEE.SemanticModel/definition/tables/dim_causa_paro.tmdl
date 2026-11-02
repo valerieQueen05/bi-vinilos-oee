@@ -1,0 +1,100 @@
+table dim_causa_paro
+	lineageTag: 6c3b8026-f712-46fb-aca4-b7bb325ecada
+
+	column sk_causa
+		dataType: int64
+		isHidden
+		lineageTag: a21cd34d-603d-4e60-b4e2-1f271ffe2450
+		summarizeBy: none
+		sourceColumn: sk_causa
+
+	column cod_causa
+		dataType: string
+		lineageTag: 3b90d751-2d5d-4996-8e98-a9dcfdf32bc6
+		summarizeBy: none
+		sourceColumn: cod_causa
+
+	column cod_codigo
+		dataType: string
+		lineageTag: a0017db8-8960-47ad-b6dc-4b6735c20dc5
+		summarizeBy: none
+		sourceColumn: cod_codigo
+
+	column codigo_desc
+		dataType: string
+		lineageTag: 6bcdc986-1142-4d9d-b187-58d34bac03bb
+		summarizeBy: none
+		sourceColumn: codigo_desc
+
+	column area_impacto
+		dataType: string
+		lineageTag: d797822f-7f9a-4581-a5f7-aa43d23b6087
+		summarizeBy: none
+		sourceColumn: area_impacto
+
+	column categoria_oee
+		dataType: string
+		lineageTag: 070a1420-a773-431d-a98a-6ae0739ea124
+		summarizeBy: none
+		sourceColumn: categoria_oee
+
+	column es_planificado
+		dataType: boolean
+		lineageTag: f6758f7d-940b-42d8-a6a0-cd92636206ea
+		summarizeBy: none
+		sourceColumn: es_planificado
+
+	column cod_sistema
+		dataType: string
+		lineageTag: e7b81edd-c3b1-4702-8917-20d7ca1b7dcf
+		summarizeBy: none
+		sourceColumn: cod_sistema
+
+	column sistema_desc
+		dataType: string
+		lineageTag: d07ef5ed-c272-450f-bdda-f246b9c54da8
+		summarizeBy: none
+		sourceColumn: sistema_desc
+
+	column cod_componente
+		dataType: string
+		lineageTag: 92e4142e-2384-4b32-9a8a-c38b3a092afa
+		summarizeBy: none
+		sourceColumn: cod_componente
+
+	column componente_desc
+		dataType: string
+		lineageTag: 48c041c8-80c3-474b-81de-b1173b38d605
+		summarizeBy: none
+		sourceColumn: componente_desc
+
+	column nivel_detalle
+		dataType: int64
+		lineageTag: c95c4e5c-8d8e-410c-a9cd-d77b52f70c9a
+		summarizeBy: none
+		sourceColumn: nivel_detalle
+
+	hierarchy 'Causa de paro'
+		lineageTag: 1eb33869-02c4-4621-8deb-d39573085130
+
+		level Código
+			lineageTag: 0e032770-7448-49ff-9601-7773c3c0bb0f
+			column: codigo_desc
+
+		level Sistema
+			lineageTag: fa880a9b-ea05-42bf-832e-da09d134c0b7
+			column: sistema_desc
+
+		level Componente
+			lineageTag: 6e164cec-ec13-4616-b903-9a5c192635f5
+			column: componente_desc
+
+	partition dim_causa_paro = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="dim_causa_paro"]}[Data]
+				in
+				    Tabla
+

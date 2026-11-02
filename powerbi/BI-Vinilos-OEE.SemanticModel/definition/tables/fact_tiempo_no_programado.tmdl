@@ -1,0 +1,59 @@
+table fact_tiempo_no_programado
+	lineageTag: 55acf85e-7e0d-40db-920c-3ee4cb56d2ae
+
+	column id_registro
+		dataType: int64
+		isHidden
+		lineageTag: a2362987-120d-42b5-913f-8d50112f4d0a
+		summarizeBy: none
+		sourceColumn: id_registro
+
+	column sk_fecha
+		dataType: int64
+		isHidden
+		lineageTag: b0cf70b6-d4cc-4259-bc19-4498c5ae3f7b
+		summarizeBy: none
+		sourceColumn: sk_fecha
+
+	column sk_maquina
+		dataType: int64
+		isHidden
+		lineageTag: 914e8a15-a13f-4686-baf6-5a573c45ab92
+		summarizeBy: none
+		sourceColumn: sk_maquina
+
+	column sk_turno
+		dataType: int64
+		isHidden
+		lineageTag: eabbe660-1590-46e7-aac0-2bb1b23f7f2f
+		summarizeBy: none
+		sourceColumn: sk_turno
+
+	column sk_motivo
+		dataType: int64
+		isHidden
+		lineageTag: e9ef78c0-1143-42a7-8fe8-1494ee0de906
+		summarizeBy: none
+		sourceColumn: sk_motivo
+
+	column horas_no_programadas
+		dataType: double
+		lineageTag: ac2800c5-b162-4ac1-aeb3-46538b173942
+		summarizeBy: sum
+		sourceColumn: horas_no_programadas
+
+	column dq_horas_recortadas
+		dataType: boolean
+		lineageTag: dc048547-4f3f-4017-bfb8-0395198f260c
+		summarizeBy: none
+		sourceColumn: dq_horas_recortadas
+
+	partition fact_tiempo_no_programado = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="fact_tiempo_no_programado"]}[Data]
+				in
+				    Tabla
+

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "35044d8033050cc7db44",
+  "position": {
+    "x": 1219.9613152804641,
+    "y": 120,
+    "z": 0,
+    "height": 960,
+    "width": 679.61315280464214,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_motivo_no_programado"
+                    }
+                  },
+                  "Property": "motivo_estandar"
+                }
+              },
+              "queryRef": "dim_motivo_no_programado.motivo_estandar",
+              "nativeQueryRef": "motivo_estandar",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Horas No Programadas"
+                }
+              },
+              "queryRef": "_Medidas.Horas No Programadas",
+              "nativeQueryRef": "Horas No Programadas"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Medidas"
+                  }
+                },
+                "Property": "Horas No Programadas"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

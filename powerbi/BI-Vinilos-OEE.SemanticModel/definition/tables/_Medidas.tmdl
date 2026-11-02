@@ -1,0 +1,234 @@
+table _Medidas
+	lineageTag: b42d28c2-0279-4054-bbba-2ab3b0d5382b
+
+	measure 'Horas Trabajadas' = SUM ( fact_produccion_turno[horas_trabajadas] )
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: b00df5f2-acf9-4bc8-bad1-b5260e0fcbdb
+
+	measure 'Horas Paro' = SUM ( fact_produccion_turno[horas_paro_total] )
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: b70a9811-cdc6-4bba-bc66-79a76464da74
+
+	measure Pacas = SUM ( fact_produccion_turno[pacas_producidas] )
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: 45d00441-808c-4c6c-983d-dc6c32fede77
+
+	measure 'Registros de Turno' = COUNTROWS ( fact_produccion_turno )
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: 276a0387-d437-4148-943e-92715d8240ab
+
+	measure '% Productividad' = DIVIDE ( [Horas Trabajadas] - [Horas Paro], [Horas Trabajadas] )
+		formatString: 0.0%
+		displayFolder: 2 Indicadores P-MTO-22
+		lineageTag: af60e5c1-e604-4c7d-a7ef-a3d5f35f403a
+
+	measure '% Paro' = 1 - [% Productividad]
+		formatString: 0.0%
+		displayFolder: 2 Indicadores P-MTO-22
+		lineageTag: 7622faa7-0f77-49eb-92eb-47604a6b9e4c
+
+	measure '% Código s/ Horas Trabajadas' = DIVIDE ( [Horas Paro (eventos)], CALCULATE ( [Horas Trabajadas], REMOVEFILTERS ( dim_causa_paro ) ) )
+		formatString: 0.00%
+		displayFolder: 2 Indicadores P-MTO-22
+		lineageTag: 055b1e4d-89ff-463d-8776-16b618ab28e1
+
+	measure 'T Planificado' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_planificado_h] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+		formatString: #,0.0
+		displayFolder: 3 OEE
+		lineageTag: 0ef91ecc-c80c-4abe-8dca-550b80381a85
+
+	measure 'T Operativo' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+		formatString: #,0.0
+		displayFolder: 3 OEE
+		lineageTag: 0fb240bb-dd90-42c0-b35f-ed6c0552f7ac
+
+	measure 'T Neto' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ) - SUM ( fact_produccion_turno[horas_paro_calidad] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+		formatString: #,0.0
+		displayFolder: 3 OEE
+		lineageTag: 8920e25f-7d8d-4140-958c-7a32a8388cf9
+
+	measure 'T Ideal' = CALCULATE ( SUM ( fact_produccion_turno[tiempo_ideal_h] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+		formatString: #,0.0
+		displayFolder: 3 OEE
+		lineageTag: 8fc978c2-e5f8-4a4b-a5b9-cee334926149
+
+	measure Disponibilidad = DIVIDE ( [T Operativo], [T Planificado] )
+		formatString: 0.0%
+		displayFolder: 3 OEE
+		lineageTag: 1b05afc8-757e-4d9b-9b14-e1c231a2815e
+
+	measure Rendimiento = DIVIDE ( [T Ideal], [T Neto] )
+		formatString: 0.0%
+		displayFolder: 3 OEE
+		lineageTag: 411823fc-225f-465d-9a79-4e411ba1860e
+
+	measure Calidad = DIVIDE ( [T Neto], [T Operativo] )
+		formatString: 0.0%
+		displayFolder: 3 OEE
+		lineageTag: 17948d83-a02b-498a-a270-26723223ef5b
+
+	measure OEE = DIVIDE ( [T Ideal], [T Planificado] )
+		formatString: 0.0%
+		displayFolder: 3 OEE
+		lineageTag: 9bcc6552-51f4-46bb-8ac5-a5b4162fe4e3
+
+	measure 'OEE Meta' = 0.75
+		formatString: 0.0%
+		displayFolder: 3 OEE
+		lineageTag: 6dcc011e-40d3-4d40-94cf-95d71e60ef5e
+
+	measure 'OEE Semáforo' = SWITCH ( TRUE (), ISBLANK ( [OEE] ), BLANK (), [OEE] >= 0.75, "#2E7D32", [OEE] >= 0.60, "#F9A825", "#C62828" )
+		displayFolder: 3 OEE
+		lineageTag: 2cde825b-6e88-48f1-aff6-18e83c5ac82f
+
+	measure 'Pacas Meta' = CALCULATE ( SUM ( fact_produccion_turno[pacas_meta] ), fact_produccion_turno[es_valido_oee] = TRUE () )
+		formatString: #,0
+		displayFolder: 3 OEE
+		lineageTag: 937421f5-75b5-4ee6-adc7-772a07b0117f
+
+	measure 'Cumplimiento Meta' = DIVIDE ( CALCULATE ( [Pacas], fact_produccion_turno[es_valido_oee] = TRUE () ), [Pacas Meta] )
+		formatString: 0.0%
+		displayFolder: 3 OEE
+		lineageTag: 3d92c4d6-75be-4481-b75c-5ade6d9f46f0
+
+	measure 'Horas Paro (eventos)' = SUM ( fact_paro[horas_paro] )
+		formatString: #,0.0
+		displayFolder: 4 Paros
+		lineageTag: c89d38aa-88bc-456c-bc25-21eb065e2539
+
+	measure 'Eventos de Paro' = COUNTROWS ( fact_paro )
+		formatString: #,0
+		displayFolder: 4 Paros
+		lineageTag: bb609972-5b20-49da-b8bd-018bdc8f0e96
+
+	measure 'Minutos por Evento' = DIVIDE ( SUM ( fact_paro[minutos_paro] ), [Eventos de Paro] )
+		formatString: #,0.0
+		displayFolder: 4 Paros
+		lineageTag: dae91555-d9d6-4311-8092-be4da66303f1
+
+	measure '% del Tiempo de Paro' = DIVIDE ( [Horas Paro (eventos)], CALCULATE ( [Horas Paro (eventos)], ALLSELECTED ( dim_causa_paro ) ) )
+		formatString: 0.0%
+		displayFolder: 4 Paros
+		lineageTag: 91e02cfd-906d-4bd1-9e6d-71608f9196ee
+
+	measure 'Pareto % Acumulado' =
+			VAR _actual = [Horas Paro (eventos)]
+			VAR _tabla = ADDCOLUMNS ( ALLSELECTED ( dim_causa_paro[codigo_desc] ), "@h", [Horas Paro (eventos)] )
+			VAR _acum = SUMX ( FILTER ( _tabla, [@h] >= _actual ), [@h] )
+			RETURN IF ( ISBLANK ( _actual ), BLANK (), DIVIDE ( _acum, SUMX ( _tabla, [@h] ) ) )
+		formatString: 0%
+		displayFolder: 4 Paros
+		lineageTag: 82149754-4480-4c7b-8f98-ef5f3ba234d1
+
+	measure 'Pareto Clase ABC' =
+			VAR p = [Pareto % Acumulado] - [% del Tiempo de Paro]
+			RETURN IF ( ISBLANK ( [Horas Paro (eventos)] ), BLANK (), IF ( p < 0.8, "A", IF ( p < 0.95, "B", "C" ) ) )
+		displayFolder: 4 Paros
+		lineageTag: 2df918a6-ee96-4062-b2b0-08f6887a1880
+
+	measure 'Horas Paro por Persona Involucrada' = CALCULATE ( [Horas Paro (eventos)], USERELATIONSHIP ( fact_paro[sk_persona_involucrada], dim_persona[sk_persona] ) )
+		formatString: #,0.0
+		displayFolder: 4 Paros
+		lineageTag: 4ed65eee-0f42-49d1-b676-3390a693b96a
+
+	measure Fallas = CALCULATE ( [Eventos de Paro], dim_causa_paro[cod_codigo] IN { "01", "02" } )
+		formatString: #,0
+		displayFolder: 4 Paros
+		lineageTag: 44352bc5-f3a9-4e18-8e57-aa242885dce8
+
+	measure 'MTBF (h)' = DIVIDE ( SUM ( fact_produccion_turno[tiempo_operativo_h] ), [Fallas] )
+		formatString: #,0.0
+		displayFolder: 4 Paros
+		lineageTag: 0a040cdb-0def-4584-ac5c-9228511c10c5
+
+	measure 'MTTR (min)' = DIVIDE ( CALCULATE ( SUM ( fact_paro[minutos_paro] ), dim_causa_paro[cod_codigo] IN { "01", "02" } ), [Fallas] )
+		formatString: #,0.0
+		displayFolder: 4 Paros
+		lineageTag: cb9555ce-106d-4052-8fb8-a784f02b33a4
+
+	measure 'Horas No Programadas' = SUM ( fact_tiempo_no_programado[horas_no_programadas] )
+		formatString: #,0
+		displayFolder: 5 Capacidad
+		lineageTag: 4423ba6f-76c5-4841-a2af-4288bb0b441f
+
+	measure Utilización = DIVIDE ( [Horas Trabajadas], [Horas Trabajadas] + [Horas No Programadas] )
+		formatString: 0.0%
+		displayFolder: 5 Capacidad
+		lineageTag: c91eb964-5ede-458a-9b9f-33b9d650d352
+
+	measure TEEP = [OEE] * [Utilización]
+		formatString: 0.0%
+		displayFolder: 5 Capacidad
+		lineageTag: 7a239012-0cf8-4374-bba1-ac70e3716eb7
+
+	measure 'Horas No Programadas Controlables' = CALCULATE ( [Horas No Programadas], dim_motivo_no_programado[es_controlable] = TRUE () )
+		formatString: #,0
+		displayFolder: 5 Capacidad
+		lineageTag: 1dcf8f73-ee82-44c1-aed0-83aa8450d334
+
+	measure 'OEE Año Anterior' = CALCULATE ( [OEE], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+		formatString: 0.0%
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: 7b3a3fa6-30a8-4db1-b019-2ad61e2c7a3f
+
+	measure 'Var OEE vs Año Anterior (pp)' = IF ( ISBLANK ( [OEE Año Anterior] ) || ISBLANK ( [OEE] ), BLANK (), ( [OEE] - [OEE Año Anterior] ) * 100 )
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: df6c0834-3797-4e74-b59b-9ac4678935e1
+
+	measure 'OEE Mes Anterior' = CALCULATE ( [OEE], DATEADD ( dim_fecha[fecha], -1, MONTH ) )
+		formatString: 0.0%
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: 686666bb-acb7-44c0-9d83-bf3319379d8f
+
+	measure 'OEE Móvil 3 Meses' = CALCULATE ( [OEE], DATESINPERIOD ( dim_fecha[fecha], MAX ( dim_fecha[fecha] ), -3, MONTH ) )
+		formatString: 0.0%
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: 06828de6-eec3-4172-867f-83e34da843d3
+
+	measure 'Pacas YTD' = TOTALYTD ( [Pacas], dim_fecha[fecha] )
+		formatString: #,0
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: 8c2dbdc9-d6dc-4403-9017-a4eadae92998
+
+	measure 'Pacas YTD Año Anterior' = CALCULATE ( [Pacas YTD], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+		formatString: #,0
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: affb093d-6541-4a2c-a184-5c33c6c469c7
+
+	measure 'Crecimiento Pacas YTD' = DIVIDE ( [Pacas YTD] - [Pacas YTD Año Anterior], [Pacas YTD Año Anterior] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: 1a2e1e4b-8fd6-4a3a-bdd0-fcdc4b9f4253
+
+	measure 'Horas Paro Año Anterior' = CALCULATE ( [Horas Paro (eventos)], SAMEPERIODLASTYEAR ( dim_fecha[fecha] ) )
+		formatString: #,0.0
+		displayFolder: 6 Inteligencia de tiempo
+		lineageTag: 6764e5d2-512b-437a-894d-0c3f81088c78
+
+	measure '% Turnos con Estándar Imputado' = DIVIDE ( CALCULATE ( [Registros de Turno], fact_produccion_turno[origen_estandar] <> "tabla_maquina" ), [Registros de Turno] )
+		formatString: 0.0%
+		displayFolder: 7 Calidad de datos
+		lineageTag: c75188ad-3a5d-481b-b707-9859696b8022
+
+	measure 'Turnos Excluidos de OEE' = CALCULATE ( [Registros de Turno], fact_produccion_turno[es_valido_oee] = FALSE () )
+		formatString: #,0
+		displayFolder: 7 Calidad de datos
+		lineageTag: d02586a6-8606-46f5-ac0f-4ef0c62508a8
+
+	column Columna
+		dataType: int64
+		isHidden
+		lineageTag: 3f4d64f6-1e51-444d-aa83-da5efc4ff80f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Columna]
+
+	partition _Medidas = calculated
+		mode: import
+		source = ROW ( "Columna", 1 )
+

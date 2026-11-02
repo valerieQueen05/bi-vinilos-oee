@@ -1,0 +1,101 @@
+table dim_maquina
+	lineageTag: 938c0ebb-539e-42ba-883f-c11751cdf09b
+
+	column sk_maquina
+		dataType: int64
+		isHidden
+		lineageTag: 84c5d542-4a11-4032-a3ea-590c1e0ad877
+		summarizeBy: none
+		sourceColumn: sk_maquina
+
+	column cod_maquina
+		dataType: string
+		lineageTag: c719b86d-0622-4892-a05b-60db3434eb24
+		summarizeBy: none
+		sourceColumn: cod_maquina
+
+	column nombre_maquina
+		dataType: string
+		lineageTag: be7724da-feff-495b-a909-4f07426e10b3
+		summarizeBy: none
+		sourceColumn: nombre_maquina
+
+	column linea
+		dataType: string
+		lineageTag: c40ff2eb-3a61-49d6-8687-8728d0175bee
+		summarizeBy: none
+		sourceColumn: linea
+
+	column velocidad_nominal_upm
+		dataType: double
+		lineageTag: e5a90d19-509d-47ce-99ca-eb92bb59ff01
+		summarizeBy: sum
+		sourceColumn: velocidad_nominal_upm
+
+		annotation SummarizationSetBy = Automatic
+
+	column factor_eficiencia
+		dataType: double
+		lineageTag: 7591d7d8-8af8-4774-8fe0-85150d8f081c
+		summarizeBy: sum
+		sourceColumn: factor_eficiencia
+
+		annotation SummarizationSetBy = Automatic
+
+	column valido_desde
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 6c4af09f-5333-4770-b4a6-5b5b7a39c2af
+		summarizeBy: none
+		sourceColumn: valido_desde
+
+		variation Variation
+			isDefault
+			relationship: f7c3e15f-1458-4a38-b2e4-47c9982d3bd0
+			defaultHierarchy: LocalDateTable_b0a4d076-5333-4bab-b80f-f1d4fed7f8b5.'Date Hierarchy'
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column valido_hasta
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: d83cbac9-d915-4c36-83df-2f1383ec74a2
+		summarizeBy: none
+		sourceColumn: valido_hasta
+
+		variation Variation
+			isDefault
+			relationship: ef69eb6a-9d28-4e98-b0d4-a19b0f34dded
+			defaultHierarchy: LocalDateTable_5039bbee-ead0-4747-af87-357b5ac789fe.'Date Hierarchy'
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column es_actual
+		dataType: boolean
+		isHidden
+		lineageTag: 9f0c6a22-e6de-4dd0-b3cd-0828b7ffd18f
+		summarizeBy: none
+		sourceColumn: es_actual
+
+	hierarchy Planta
+		lineageTag: 8fb9f012-b7f9-416c-8c74-655fd2511878
+
+		level Línea
+			lineageTag: e5b6c1e8-d9a6-49fc-87a6-f7c1cdf091f7
+			column: linea
+
+		level Máquina
+			lineageTag: 6ce89b03-6f83-46ba-a301-5e78689494c9
+			column: cod_maquina
+
+	partition dim_maquina = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="dim_maquina"]}[Data]
+				in
+				    Tabla
+

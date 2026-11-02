@@ -1,0 +1,70 @@
+table dim_referencia
+	lineageTag: 498fbdc6-8c77-48e3-9048-b22313206ed2
+
+	column sk_referencia
+		dataType: int64
+		isHidden
+		lineageTag: 7b6761f9-7466-4cc3-96fd-2a931a888f16
+		summarizeBy: none
+		sourceColumn: sk_referencia
+
+	column cod_referencia
+		dataType: string
+		lineageTag: 1951a5fe-3be6-41bb-8116-cd45db23b273
+		summarizeBy: none
+		sourceColumn: cod_referencia
+
+	column nombre_referencia
+		dataType: string
+		lineageTag: 36453fac-6cd8-4fcc-b367-c697da2d7198
+		summarizeBy: none
+		sourceColumn: nombre_referencia
+
+	column marca
+		dataType: string
+		lineageTag: d070fc91-b605-48b0-ab4b-409f4de66441
+		summarizeBy: none
+		sourceColumn: marca
+
+	column tamano_cc
+		dataType: int64
+		lineageTag: 6b5bd9fa-de47-459f-879b-e94b537c3c82
+		summarizeBy: none
+		sourceColumn: tamano_cc
+
+	column n_colores
+		dataType: int64
+		lineageTag: 9f2ceec0-7073-4d2c-974b-c4f0dff6e6ea
+		summarizeBy: none
+		sourceColumn: n_colores
+
+	column familia_tamano
+		dataType: string
+		lineageTag: c16c5d94-e677-439e-a6b6-d02895e2eb89
+		summarizeBy: none
+		sourceColumn: familia_tamano
+
+	hierarchy Producto
+		lineageTag: 6c451060-809c-4a29-8f33-114e701f3043
+
+		level Familia
+			lineageTag: 73804b7d-fc2d-46af-87c2-fd646d27de9e
+			column: familia_tamano
+
+		level Marca
+			lineageTag: 87fd9f8f-8eb2-48bb-ac0f-5e0046422795
+			column: marca
+
+		level Referencia
+			lineageTag: c1819b8e-2f7b-4fcc-aef0-91f6361267b7
+			column: nombre_referencia
+
+	partition dim_referencia = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database(ServidorPostgres, BaseDatos),
+				    Tabla = Origen{[Schema="dw",Item="dim_referencia"]}[Data]
+				in
+				    Tabla
+
