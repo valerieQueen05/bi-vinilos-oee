@@ -117,7 +117,6 @@ python -m etl.diccionario   # regenera docs/05_diccionario_datos.md desde el cat
 | 7 | [Arquitectura y operación](docs/07_arquitectura_y_operacion.md) | Arquitectura, Power BI vs. Grafana, evolución a PLC/SCADA, datos personales y seguridad |
 | 8 | [Hallazgos y recomendaciones](docs/08_hallazgos_y_recomendaciones.md) | Guion de la sustentación |
 | — | [Reporte generado por el ETL](docs/generados/calidad_y_conciliacion.md) | Conteos antes y después de la última corrida |
-| — | [Guía del equipo](docs/guia_equipo.md) | Plan de commits, checklist del PDF y ensayo de la sustentación |
 
 ## Decisiones técnicas clave
 
@@ -132,5 +131,5 @@ python -m etl.diccionario   # regenera docs/05_diccionario_datos.md desde el cat
 
 | Integrante | Aportes principales |
 |---|---|
-| _Nombre 1_ | _p. ej. ETL, modelo dimensional, SQL_ |
-| _Nombre 2_ | _p. ej. Power BI, Grafana, Docker, documentación_ |
+| Juan Sebastian Rodriguez Naranjo | _p. ETL, modelo dimensional, SQL_ |
+| Valerie Sofia Cardenas Medina | _p. Power BI, Grafana, Docker, documentación_ |
