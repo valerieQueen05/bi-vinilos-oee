@@ -1,0 +1,12 @@
+patron_tipo_paro,motivo_estandar,responsable,es_controlable
+PARO DE MAQUINA POR VENTAS,Sin demanda (ventas),Comercial,false
+FALTA DE PROGRAMACI,Falta de programación,Planeación,true
+FALTA DE MATERIA|FALTA DE MATERIALES|MATERIA PRIMA DEFECTUOSA|MATERIAL DE EMPAQUE NO CONFORME,Falta de material,Almacén / Compras,true
+FALTA DE OPERARIO,Falta de personal,Producción,true
+LABORATORIO|MICROBIOLOG,Espera de laboratorio,Calidad,true
+ALISTAMIENTO|CAMBIO DE PRODUCTO|CAMBIO DE REFERENCIA,Cambio de referencia,Producción,true
+AJUSTE OPERATIVO|AJUSTE DE OPERACI,Ajuste de operación,Producción,true
+AJUSTE ELECTRICO|SISTEMAS DE POTENCIA,Servicios (energía y agua),Mantenimiento,false
+LIMPIEZA NO PROGRAMADA,Limpieza no programada,Producción,true
+PROCESO ANTERIOR,Paro por proceso anterior,Producción,true
+.*,No especificado,Sin asignar,false

@@ -1,0 +1,100 @@
+# Reglas de alerta, punto de contacto y política de notificación aprovisionados.
+#
+# Regla: "OEE bajo en línea de envasado"
+#   Señal  : índice = OEE promedio de las últimas 3 lecturas horarias de la máquina
+#            ÷ umbral de esa máquina (vista dw.v_umbral_alerta_oee).
+#   Umbral : percentil 25 del OEE por turno 2024-2025 DE CADA MÁQUINA
+#            (V1 45,5 % · V2 51,0 % · V3 70,4 % · V4 67,8 %; planta 60,2 %).
+#   Dispara: índice < 1 sostenido 1 minuto.
+#   Por qué: un umbral fijo de 60 % dejaría a Vinilos_1 (mediana 59,8 %) en alerta casi
+#            permanente -> fatiga de alertas. Comparar cada línea con su propio peor
+#            cuartil detecta lo ANORMAL para esa máquina. 3 lecturas filtran el ruido de
+#            una sola hora mala. La meta de planta (60 %) se ve como línea en el tablero.
+#   Es multidimensional: una instancia de alerta por máquina (etiqueta "maquina").
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: webhook-planta
+    receivers:
+      - uid: webhook-planta
+        type: webhook
+        settings:
+          url: http://alertas:8080/
+          httpMethod: POST
+        disableResolveMessage: false
+
+policies:
+  - orgId: 1
+    receiver: webhook-planta
+    group_by: ["alertname", "maquina"]
+    group_wait: 10s
+    group_interval: 1m
+    repeat_interval: 30m
+
+groups:
+  - orgId: 1
+    name: planta-envasado
+    folder: Alertas de planta
+    interval: 30s
+    rules:
+      - uid: oee-bajo-linea
+        title: OEE bajo en línea de envasado
+        condition: C
+        for: 1m
+        noDataState: OK
+        execErrState: Error
+        labels:
+          severidad: critica
+          area: produccion
+        annotations:
+          summary: "{{ $labels.maquina }}: OEE de las últimas 3 h al {{ humanizePercentage $values.B.Value }} de su umbral ({{ $labels.umbral_oee }})"
+          description: >-
+            El OEE promedio de las últimas 3 horas de {{ $labels.maquina }} cayó por debajo de su
+            percentil 25 histórico ({{ $labels.umbral_oee }}). Revisar el panel de causa principal y
+            llamar a mantenimiento si la causa es [01] Falla electromecánica.
+          __dashboardUid__: monitoreo-lineas
+          __panelId__: "4"
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: pg-bi
+            model:
+              refId: A
+              rawQuery: true
+              editorMode: code
+              format: table
+              rawSql: |-
+                SELECT u.maquina,
+                       to_char(100 * u.umbral_oee, 'FM990.0') || ' %' AS umbral_oee,
+                       (AVG(r.oee) / u.umbral_oee)::float AS indice_oee
+                FROM (
+                  SELECT maquina, oee,
+                         ROW_NUMBER() OVER (PARTITION BY maquina ORDER BY ts DESC) AS n
+                  FROM dw.v_rt_hora
+                  WHERE ts > now() - interval '1 hour'
+                ) r
+                JOIN dw.v_umbral_alerta_oee u USING (maquina)
+                WHERE r.n <= 3
+                GROUP BY u.maquina, u.umbral_oee
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              settings:
+                mode: dropNN
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: lt
+                    params: [1]

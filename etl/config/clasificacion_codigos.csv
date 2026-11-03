@@ -1,0 +1,19 @@
+cod_codigo,descripcion_override,area_override,categoria_oee,es_planificado,justificacion
+01,,,Disponibilidad,false,Falla de equipo: pérdida de disponibilidad (avería)
+02,,,Disponibilidad,false,Espera de mantenimiento: avería extendida
+03,,,Disponibilidad,false,Falla de servicios (aire/energía/vapor)
+04,,,Planificado,true,Mantenimiento preventivo: se programa; se descuenta del tiempo planificado
+05,,,Disponibilidad,false,Ajuste operativo: microparos y ajustes de máquina
+06,,,Disponibilidad,false,Limpieza por derrame: no planificada
+07,,,Disponibilidad,false,Alistamiento / cambio de referencia: pérdida de setup (SMED)
+08,,,Disponibilidad,false,Capacitación o reunión dentro del turno: se decidió contarla como pérdida para hacerla visible
+09,,,Disponibilidad,false,Falta de operario
+10,,,Disponibilidad,false,Paro por ventaja / evacuación
+11,,,Calidad,false,Reproceso: tiempo dedicado a rehacer producto -> pérdida de calidad (proxy)
+12,,,Disponibilidad,false,Materia prima defectuosa: la máquina se detiene
+13,,,Disponibilidad,false,Espera del aval de microbiología
+14,,,Disponibilidad,false,Falta de materia prima
+15,,,Disponibilidad,false,Cambio de insumos: setup; el catálogo lo llama 'paro programado' pero en OEE es pérdida evitable
+16,,,Planificado,true,Alimentación y aseo: tiempo programado del turno (40 o 70 min estándar)
+17,,,Planificado,true,Pausa activa: obligatoria por SST (3 o 6 min estándar)
+18,Desinfección,Paro programado,Planificado,true,La columna 'Código 18' es Desinfección (hoja Registro); el catálogo de listas la llama 'Paro de máquina' (inconsistencia)

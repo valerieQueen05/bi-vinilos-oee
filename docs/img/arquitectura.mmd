@@ -1,0 +1,32 @@
+flowchart LR
+    subgraph F["Fuente"]
+        P["Formato 'hora a hora'<br/>(papel, operarias)"] --> X["Excel .xlsm<br/>SEGUIMIENTO TEMPERAS<br/>Y VINILOS"]
+    end
+    subgraph D["Docker Compose (un solo comando)"]
+        E["ETL Python<br/>extraer · limpiar (R01-R20)<br/>transformar · cargar · conciliar"]
+        subgraph PG["PostgreSQL 16"]
+            S[("stg<br/>copia cruda")]
+            W[("dw<br/>estrella")]
+            A[("audit<br/>reglas y conciliación")]
+            V[("priv<br/>nombres reales")]
+        end
+        SIM["Simulador<br/>1 tick = 1 hora<br/>(mañana: PLC/SCADA)"]
+        G["Grafana 11<br/>provisioning automático<br/>tablero + alerta"]
+        AL["Receptor de alertas<br/>(webhook)"]
+    end
+    subgraph H["Equipo anfitrión"]
+        PBI["Power BI Desktop<br/>(PBIP + TMDL)"]
+        DB["DBeaver"]
+    end
+    GH[("GitHub<br/>código, SQL, JSON,<br/>PBIP, docs")]
+    X -->|"montado solo lectura"| E
+    E --> S --> W
+    E --> A
+    E --> V
+    SIM -->|"INSERT fact_produccion_hora"| W
+    W -->|"grafana_ro (solo lectura)"| G
+    G -->|"OEE < P25 de la máquina"| AL
+    W -->|"bi_lector · Importar"| PBI
+    W --- DB
+    G -.->|"supervisores · cada 10 s"| U1(("Planta"))
+    PBI -.->|"comité · mensual"| U2(("Gerencia"))
