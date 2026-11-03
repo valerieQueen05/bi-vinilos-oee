@@ -1,0 +1,10 @@
+sk_turno,cod_turno,nombre_turno,hora_inicio,hora_fin,duracion_h,minutos_paro_programado_std,tipo_jornada,franja
+-1,SR,Sin registrar,,,,,Sin turno,N/A
+1,T1,Turno 1 (6:00-14:00),06:00,14:00,8,43,8 h,Mañana
+2,T2,Turno 2 (14:00-22:00),14:00,22:00,8,43,8 h,Tarde
+3,T3,Turno 3 (22:00-06:00),22:00,06:00,8,43,8 h,Noche
+4,TA,Jornada 6:00-16:30,06:00,16:30,10.5,76,"10,5 h",Día
+5,TD,Jornada 6:00-18:00,06:00,18:00,12,76,12 h,Día
+6,TN,Jornada 18:00-06:00,18:00,06:00,12,76,12 h,Noche
+7,NA,No aplica (día no programado),,,,,Sin turno,N/A
+8,SH,Sin turno (registro histórico),,,,,Sin turno,N/A

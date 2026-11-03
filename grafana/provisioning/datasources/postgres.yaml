@@ -1,0 +1,23 @@
+# Fuente de datos aprovisionada automáticamente al iniciar el contenedor.
+# Las credenciales llegan por variables de entorno (archivo .env, nunca versionado).
+# Grafana se conecta con el rol de SOLO LECTURA grafana_ro (no con el dueño de la BD).
+apiVersion: 1
+
+datasources:
+  - name: PostgreSQL-BI
+    uid: pg-bi
+    type: grafana-postgresql-datasource
+    access: proxy
+    url: db:5432
+    user: ${GRAFANA_DB_USER}
+    isDefault: true
+    editable: false
+    jsonData:
+      database: ${POSTGRES_DB}
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: false
+      maxOpenConns: 5
+      timeInterval: 30s
+    secureJsonData:
+      password: ${GRAFANA_DB_PASSWORD}

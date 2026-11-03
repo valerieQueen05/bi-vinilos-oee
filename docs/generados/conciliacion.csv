@@ -1,0 +1,8 @@
+metrica,total_fuente,total_dw,diferencia,pct_diferencia,explicacion
+Filas de la Base De Datos,8208.0,8183.0,25.0,0.3046,"Duplicados exactos eliminados: 25. Las filas se reparten en: registros de turno=4742, continuaciones=1336, no programado=1855, sin actividad=250"
+Horas trabajadas,38063.35,37934.35,129.0,0.3389,129.00 h de filas duplicadas eliminadas + 0.00 h en filas que no son registro de turno. Residuo sin explicar: 0.000 h
+Pacas producidas,378778.0,322794.0,55984.0,14.7802,"1019 pacas de duplicados + 54965 'pacas' atípicas anuladas (regla R18, eran unidades) + 0 en filas fuera de producción. Residuo: 0.0"
+Tiempo de paro (h) · fact_paro,8449.652,8435.335,14.317,0.1694,14.32 h de paros en filas duplicadas eliminadas (las continuaciones idénticas se conservan). Residuo: 0.000 h
+Tiempo de paro (h) · fact_produccion_turno,8435.335,8361.685,73.65,0.8731,73.65 h de paros que no pertenecen a un registro de turno (continuaciones sin encabezado o paros anotados en días no programados). Se conservan en fact_paro para el Pareto
+Horas no trabajadas,41519.85,41335.85,184.0,0.4432,176.00 h de duplicados + 8.00 h recortadas por superar 24 h (R19). Residuo: 0.000 h
+Paros con subcódigo (h) · hoja 'Sub codigos' encontrados en la Base De Datos,620.183,620.183,0.0,0.0,"1124 de 1124 eventos de la hoja (códigos 1, 3 y 5) existen en la Base De Datos con la misma fecha, máquina, operaria, código y minutos: la hoja es una copia del detalle y NO se carga (se duplicarían paros)"

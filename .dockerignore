@@ -1,0 +1,7 @@
+.git
+.env
+data/
+docs/
+powerbi/
+grafana/
+**/__pycache__

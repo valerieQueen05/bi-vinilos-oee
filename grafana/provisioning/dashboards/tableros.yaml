@@ -1,0 +1,15 @@
+# Proveedor de tableros: carga los JSON de /var/lib/grafana/dashboards al arrancar.
+apiVersion: 1
+
+providers:
+  - name: tableros-planta
+    orgId: 1
+    folder: Planta de envasado
+    folderUid: planta
+    type: file
+    disableDeletion: true
+    allowUiUpdates: false        # el JSON del repositorio es la fuente de verdad
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

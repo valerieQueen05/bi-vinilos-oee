@@ -1,0 +1,73 @@
+erDiagram
+    dim_fecha ||--o{ fact_produccion_turno : sk_fecha
+    dim_maquina ||--o{ fact_produccion_turno : sk_maquina
+    dim_turno ||--o{ fact_produccion_turno : sk_turno
+    dim_persona ||--o{ fact_produccion_turno : "sk_operario"
+    dim_referencia ||--o{ fact_produccion_turno : sk_referencia
+    dim_fecha ||--o{ fact_paro : sk_fecha
+    dim_maquina ||--o{ fact_paro : sk_maquina
+    dim_turno ||--o{ fact_paro : sk_turno
+    dim_referencia ||--o{ fact_paro : sk_referencia
+    dim_causa_paro ||--o{ fact_paro : sk_causa
+    dim_persona ||--o{ fact_paro : "sk_operario / sk_persona_involucrada"
+    dim_fecha ||--o{ fact_tiempo_no_programado : sk_fecha
+    dim_maquina ||--o{ fact_tiempo_no_programado : sk_maquina
+    dim_motivo_no_programado ||--o{ fact_tiempo_no_programado : sk_motivo
+    dim_maquina ||--o{ fact_produccion_hora : sk_maquina
+    dim_causa_paro ||--o{ fact_produccion_hora : sk_causa_principal
+    dim_maquina ||--o{ estandar_produccion : sk_maquina
+    dim_referencia ||--o{ estandar_produccion : sk_referencia
+
+    fact_produccion_turno {
+        int id_registro PK "grano: registro de turno"
+        numeric horas_trabajadas
+        numeric horas_paro_planificado
+        numeric horas_paro_disponibilidad
+        numeric horas_paro_calidad
+        numeric tiempo_planificado_h
+        numeric tiempo_operativo_h
+        numeric tiempo_ideal_h
+        numeric pacas_producidas
+        numeric pacas_meta
+        bool es_valido_oee
+    }
+    fact_paro {
+        bigint id_paro PK "grano: evento de paro"
+        int id_registro "degenerada"
+        numeric minutos_paro
+        numeric horas_paro
+        varchar area_involucrada
+    }
+    fact_tiempo_no_programado {
+        int id_registro PK "grano: maquina-fecha-motivo"
+        numeric horas_no_programadas
+    }
+    fact_produccion_hora {
+        bigint id_lectura PK "grano: maquina x hora"
+        timestamptz ts
+        numeric minutos_planificados
+        numeric minutos_paro_disponibilidad
+        numeric pacas_producidas
+    }
+    dim_causa_paro {
+        int sk_causa PK
+        char cod_codigo "nivel 1"
+        varchar sistema_desc "nivel 2"
+        varchar componente_desc "nivel 3"
+        varchar categoria_oee
+    }
+    dim_maquina {
+        int sk_maquina PK
+        varchar cod_maquina
+        numeric velocidad_nominal_upm
+        date valido_desde "SCD2"
+        date valido_hasta "SCD2"
+        bool es_actual "SCD2"
+    }
+    dim_fecha {
+        int sk_fecha PK
+        date fecha
+        smallint anio
+        smallint mes_num
+        bool es_festivo
+    }

@@ -1,0 +1,19 @@
+patron_observacion,observacion_estandar,motivo_estandar,responsable,es_controlable
+NO SE PROGRAMO.*COMPENSATORIO,No se programó por demanda (compensatorio),Sin demanda (ventas),Comercial,false
+NO SE PROGRAMOS? EL FIN DE SEMANA,No se programó el fin de semana por demanda,Sin demanda (ventas),Comercial,false
+NO SE PROGRAMO POR DEMANDA,No se programó por demanda,Sin demanda (ventas),Comercial,false
+SEMANA DE RE[SC]ESO,Semana de receso,Receso o inventario,Planeación,false
+INVENTARIO,Inventario,Receso o inventario,Planeación,false
+FALTA ?DE ENVASE,Falta de envase y/o tapa,Falta de material,Almacén / Compras,true
+FALTA ?DE DISPLAY,Falta de display,Falta de material,Almacén / Compras,true
+FALTA ?DE PINTURA,Falta de pinturas,Falta de material,Almacén / Compras,true
+FALTA ?DE ADICTIVO,Falta de aditivo y/o tinta,Falta de material,Almacén / Compras,true
+^MATERIA PRIMA,Materia prima,Falta de material,Almacén / Compras,true
+FALTA ?DE OPERARIO,Falta de operario,Falta de personal,Producción,true
+MANTENIMIENTO PREVENTIVO,Mantenimiento preventivo,Mantenimiento preventivo,Mantenimiento,false
+RESULTADOS DE LABORATORIO,Resultados de laboratorio,Espera de laboratorio,Calidad,true
+CAMBIO DE REFERENCIA,Cambio de referencia,Cambio de referencia,Producción,true
+SE FUE LA LUZ,Corte de energía / agua,Servicios (energía y agua),Mantenimiento,false
+SUBESTACION,Trabajos en la subestación,Servicios (energía y agua),Mantenimiento,false
+DOSIFICACION A 6 COLORES,Ajuste de dosificación a 6 colores,Ajuste de operación,Producción,true
+REGUERO|CANECA,Derrame masivo (daño en caneca),Limpieza no programada,Producción,true

@@ -1,0 +1,8 @@
+valor_origen,cod_turno
+6am-2pm (Turno 1),T1
+2pm-10pm (Turno 2),T2
+10pm-6am (Turno 3),T3
+6am-4:30pm,TA
+6am-6pm,TD
+6pm-6am,TN
+No aplica,NA

@@ -1,0 +1,33 @@
+# --- Secretos: nunca al repositorio ---
+.env
+*.env
+!.env.example
+
+# --- Fuente con datos personales (nombres de operarias y técnicos) ---
+# Si el repositorio es PÚBLICO deje esta línea activa y comparta el Excel por otro medio.
+# Si es PRIVADO (solo integrantes y docente) puede comentarla para que el clon sea reproducible.
+data/raw/*.xlsm
+data/raw/*.xlsx
+~$*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- Power BI (formato PBIP) ---
+# Se versiona la definición en texto (TMDL + JSON del reporte); se ignoran cachés locales
+powerbi/**/.pbi/localSettings.json
+powerbi/**/.pbi/cache.abf
+*.pbix
+*.pbit
+
+# --- Docker / sistema ---
+docker-compose.override.yml
+.DS_Store
+Thumbs.db
+
+# --- DBeaver ---
+.dbeaver/credentials-config.json

@@ -1,0 +1,11 @@
+cod_codigo,valor_origen_normalizado,cod_componente_destino,razon
+05,4.1,5.1,Catálogo viejo del código 5 usaba numeración 4.x
+05,4.2,5.2,Catálogo viejo: dosificador de pintura
+05,4.3,5.3,Catálogo viejo: banda transportadora de entrada
+05,4.4,5.5,Catálogo viejo: transfer y pisador de tapa
+05,4.5,5.6,Catálogo viejo: alimentador de tapa y tobogán
+05,4.6,5.7,Catálogo viejo: video jet
+05,4.7,5.8,Catálogo viejo: banda de sujeción y roscadores
+05,4.8,5.9,Catálogo viejo: sistema de etiquetado
+01,1.7.A|CAMBIO DE ROSCADORES,1.7.B,El texto dice roscadores aunque el código viejo sea 1.7A
+01,1.4.3,1.4.C,La lista desplegable escribe '1.4.3 Sensor' para la llave 1.4.C
